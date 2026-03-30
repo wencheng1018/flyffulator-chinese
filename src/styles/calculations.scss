@@ -1,0 +1,291 @@
+@use "./variables.scss" as v;
+
+#calculations {
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+  background-color: v.$fg2-color;
+  border: 1px solid v.$border-color-fg;
+  border-radius: 6px;
+}
+
+#experience {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  img#monster-icon {
+    width: 128px;
+    height: 128px;
+    object-fit: contain;
+    padding: 4px;
+    background-color: v.$fg-color;
+    border: 1px solid v.$border-color;
+    box-shadow: inset 0 0 36px black;
+    border-radius: 4px;
+  }
+
+  #target-select {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background-color: v.$stat-bg-color;
+    border: 1px solid v.$border-color-fg;
+    border-radius: 4px;
+  }
+
+  #team-setup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 15px;
+    background-color: v.$stat-bg-color;
+    border: 1px solid v.$border-color-fg;
+    border-radius: 4px;
+  }
+
+  .teammate {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    h4 {
+      margin: 0;
+      color: v.$accent-color;
+    }
+
+    input[type=text] {
+      margin-left: 10px;
+      font-style: italic;
+      background-color: v.$input-bg-color;
+      color: v.$text-color;
+      border: 1px solid v.$input-border-color;
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: 1px solid v.$border-color-fg;
+    }
+  }
+}
+
+#basic-stats {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 280px;
+  padding: 15px;
+  background-color: v.$stat-bg-color;
+  border: 1px solid v.$border-color-fg;
+  border-radius: 4px;
+}
+
+.basic-stat {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  background-color: v.$fg-color;
+  border: 1px solid v.$border-color-fg;
+  border-radius: 4px;
+  padding: 6px 15px;
+  min-width: 100px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: v.$fg2-color;
+    border-color: v.$border-color;
+  }
+
+  .basic-value {
+    text-align: right;
+    flex-grow: 1;
+    font-weight: 700;
+    min-width: 60px;
+    color: v.$accent-color;
+  }
+
+  a {
+    display: flex;
+    color: v.$text-color;
+    text-decoration: none;
+
+    &:hover {
+      color: v.$accent-color;
+    }
+  }
+}
+
+#extra-stats {
+  flex-grow: 4;
+
+  #target-select {
+    display: flex;
+    background-color: v.$stat-bg-color;
+    border: 1px solid v.$border-color-fg;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 15px;
+
+    #target-options {
+      flex-grow: 1;
+    }
+
+    #target-information {
+      flex-grow: 2;
+      display: flex;
+      gap: 10px;
+      flex-direction: row;
+      align-items: center;
+
+      #target-name {
+        font-size: 18px;
+        font-weight: 400;
+        color: v.$accent-color;
+      }
+    }
+  }
+}
+
+.category-header {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid v.$border-color-fg;
+
+  h3 {
+    margin: 0;
+    color: v.$accent-color;
+  }
+
+  img {
+    display: flex;
+  }
+}
+
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.7); 
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 6px solid rgba(241, 203, 88, 0.2);
+  border-top: 6px solid v.$border-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  column-gap: 15px;
+  row-gap: 15px;
+  position: relative;
+  padding: 10px;
+}
+
+.chart-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid v.$border-color-fg;
+  background-color: v.$stat-bg-color;
+  border-radius: 6px;
+  padding: 15px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: v.$border-color;
+    box-shadow: 0 0 10px rgba(241, 203, 88, 0.2);
+  }
+
+  &.bar {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+  }
+
+  .chart-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid v.$border-color-fg;
+
+    img.chart-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    span {
+      flex-grow: 1;
+      font-weight: 600;
+      color: v.$accent-color;
+    }
+
+    a {
+      display: flex;
+      color: v.$text-color;
+      text-decoration: none;
+
+      &:hover {
+        color: v.$accent-color;
+      }
+    }
+  }
+
+  .heal-value-stat {
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    color: #29efc6;
+    text-shadow: 0px 0px 3px #004a4a;
+  }
+}
+
+.placeholder-stat {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  font-style: italic;
+  opacity: 0.8;
+  font-weight: 300;
+  color: v.$text-color-muted;
+  background-color: v.$fg-color;
+  border: 1px solid v.$border-color-fg;
+  border-radius: 4px;
+}
