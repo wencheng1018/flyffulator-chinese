@@ -380,22 +380,25 @@ function setupItem(itemElem, i18n) {
 
     // Description
 
-    if (itemProp.description && itemProp.description.en != "null") {
-        if (itemProp.category == "raisedpet") {
-            // 处理技能描述的中文特殊情况
+    if (itemProp.description && itemProp.description != "null") {
+        let descText = itemProp.description;
+        // 检查description是字符串还是对象
+        if (typeof itemProp.description === 'object' && itemProp.description !== null) {
+            // 处理多语言描述对象
             let descLangKey = shortLanguageCode;
             if (shortLanguageCode === 'cn') {
-                descLangKey = 'cns'; // Skills.json中使用cns作为中文键
+                descLangKey = 'cns';
             }
-            out.push(<span style={{ color: "#d386ff" }}><br />{itemProp.description && (itemProp.description[descLangKey] ?? itemProp.description.en)}</span>);
+            descText = itemProp.description[descLangKey] ?? itemProp.description.en ?? '';
         }
-        else {
-            // 处理技能描述的中文特殊情况
-            let descLangKey = shortLanguageCode;
-            if (shortLanguageCode === 'cn') {
-                descLangKey = 'cns'; // Skills.json中使用cns作为中文键
+        
+        if (descText && descText != "null") {
+            if (itemProp.category == "raisedpet") {
+                out.push(<span style={{ color: "#d386ff" }}><br />{descText}</span>);
             }
-            out.push(`\n${i18n.t("tooltip_description")}${itemProp.description && (itemProp.description[descLangKey] ?? itemProp.description.en)}`);
+            else {
+                out.push(`\n${i18n.t("tooltip_description")}${descText}`);
+            }
         }
     }
 
