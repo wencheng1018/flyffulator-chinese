@@ -40,17 +40,46 @@ function App() {
   const jobOptions = {};
   const lang = i18n.resolvedLanguage || 'zh-CN';
   console.log('Current language:', lang);
+  
+  // 职业树结构排序：初心者在最前面，然后按系分组
+  const jobOrder = [
+    // 初心者
+    '9686',
+    // 战士系
+    '764', '5330', '2246', '23509',
+    // 弓箭手系
+    '9098', '3545', '20311', '9295',
+    // 圣职者系
+    '8962', '9389', '21680', '7424',
+    // 魔导士系
+    '9581', '5709', '22213', '9150'
+  ];
+  
+  // 先获取所有职业名称
+  const allJobNames = {};
   for (const [k, v] of Object.entries(Classes)) {
-    // 处理中文特殊情况
     let langKey = lang;
     if (lang && lang.startsWith('zh')) {
-      // 先尝试使用cns键（高级职业的中文名称），如果没有再使用cn键
-      jobOptions[k] = v.name && (v.name['cns'] || v.name['cn'] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
+      allJobNames[k] = v.name && (v.name['cns'] || v.name['cn'] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
     } else {
-      jobOptions[k] = v.name && (v.name[langKey] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
+      allJobNames[k] = v.name && (v.name[langKey] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
     }
-    console.log('Job option for', k, ':', jobOptions[k]);
   }
+  
+  // 按顺序添加职业
+  for (const jobId of jobOrder) {
+    if (allJobNames[jobId]) {
+      jobOptions[jobId] = allJobNames[jobId];
+    }
+  }
+  
+  // 添加可能遗漏的其他职业
+  for (const [k, v] of Object.entries(Classes)) {
+    if (!jobOptions[k] && allJobNames[k]) {
+      jobOptions[k] = allJobNames[k];
+    }
+  }
+  
   console.log('Job options:', jobOptions);
 
   function changeJob(newJobId) {
