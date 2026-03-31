@@ -73,7 +73,7 @@ function setupItem(itemElem, i18n) {
     out.push(<span style={{
         fontWeight: 700,
         color: Utils.getItemNameColor(itemProp)
-    }}>{itemProp.name && (itemProp.name[itemNameLangKey] ?? itemProp.name.en)} {statAwakeString}</span>);
+    }}>{typeof itemProp.name === 'string' ? itemProp.name : (itemProp.name[itemNameLangKey] ?? itemProp.name.en)} {statAwakeString}</span>);
 
     // TODO: Origin awakes (STA+, etc.)
 
@@ -440,7 +440,7 @@ function setupItem(itemElem, i18n) {
                         if (shortLanguageCode === 'cn') {
                             itemNameLangKey = 'cns'; // Items.json中使用cns作为中文键
                         }
-                        out.push(<span style={{ color: "#01ab19" }}><br />    {item.name && (item.name[itemNameLangKey] ?? item.name.en)}</span>);
+                        out.push(<span style={{ color: "#01ab19" }}><br />    {typeof item.name === 'string' ? item.name : (item.name[itemNameLangKey] ?? item.name.en)}</span>);
                     }
                 }
             }

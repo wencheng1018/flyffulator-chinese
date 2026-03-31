@@ -5,7 +5,6 @@ import { useTooltip } from "../../tooltipcontext";
 
 import Slot from '../equipment/inventory/slot';
 import pets from "../../assets/Pets.json";
-import Entity from "../../flyff/flyffentity";
 import skills from "../../assets/Skills.json";
 import Context from "../../flyff/flyffcontext";
 import * as Utils from "../../flyff/flyffutils";
@@ -18,7 +17,6 @@ function Search() {
     const [results, setResults] = useState([]);
     const [currentQuery, setCurrentQuery] = useState('');
     const [items, setItems] = useState(null);
-    const [monsters, setMonsters] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const { i18n } = useTranslation();
 
@@ -39,9 +37,6 @@ function Search() {
                     if (searchProperties.type === "item" && !items) {
                         const data = await Utils.loadItemsData();
                         setItems(data);
-                    } else if (searchProperties.type === "monster" && !monsters) {
-                        const data = await Utils.loadMonstersData();
-                        setMonsters(data);
                     }
                 } catch (error) {
                     console.error("Failed to load data:", error);
@@ -50,18 +45,17 @@ function Search() {
             }
         }
         loadData();
-    }, [isSearchOpen, searchProperties, items, monsters]);
+    }, [isSearchOpen, searchProperties, items]);
 
     // 当数据加载完成或角色等级变化时，重新执行搜索
     useEffect(() => {
         if (isSearchOpen && searchProperties) {
             if ((searchProperties.type === "item" && items) || 
-                (searchProperties.type === "monster" && monsters) ||
-                (searchProperties.type !== "item" && searchProperties.type !== "monster")) {
+                (searchProperties.type !== "item")) {
                 performSearch(currentQuery);
             }
         }
-    }, [Context.player.level, isSearchOpen, searchProperties, currentQuery, items, monsters]);
+    }, [Context.player.level, isSearchOpen, searchProperties, currentQuery, items]);
 
     if (!isSearchOpen) {
         return null;
@@ -72,15 +66,10 @@ function Search() {
         let res = [];
 
         let currentItems = items;
-        let currentMonsters = monsters;
         
         if (searchProperties.type === "item" && !currentItems) {
             currentItems = await Utils.loadItemsData();
             setItems(currentItems);
-        }
-        if (searchProperties.type === "monster" && !currentMonsters) {
-            currentMonsters = await Utils.loadMonstersData();
-            setMonsters(currentMonsters);
         }
 
         if (query.length >= 0) {
@@ -142,20 +131,14 @@ function Search() {
                         }
                     }
 
-                    var cnsName = item.name.cns;
-                    var enName = item.name.en;
+                    var itemName = typeof item.name === 'string' ? item.name : (item.name.cns || item.name.tw || item.name.en);
                     
                     if (query === '') {
                         res.push(new ItemElem(item));
                         continue;
                     }
                     
-                    if (cnsName && cnsName.includes(query)) {
-                        res.push(new ItemElem(item));
-                        continue;
-                    }
-                    
-                    if (enName && enName.toLowerCase().includes(query.toLowerCase())) {
+                    if (itemName && itemName.includes(query)) {
                         res.push(new ItemElem(item));
                         continue;
                     }
@@ -170,14 +153,7 @@ function Search() {
                     }
                 }
             }
-            else if (searchProperties.type == "monster") {
-                for (const [, monster] of Object.entries(currentMonsters)) {
-                    if (monster.name.en.toLowerCase().includes(query)) {
-                        res.push(new Entity(monster));
-                    }
-                }
-                res.sort((a, b) => a.level - b.level);
-            }
+
             else if (searchProperties.type == "skill") {
                 for (const [, skill] of Object.entries(skills)) {
                     let skillLangKey = shortCode;
@@ -318,33 +294,12 @@ function Search() {
                                     }}
                                 >
                                     <Slot className={"slot-item"} content={result} />
-                                    <span style={{ color: Utils.getItemNameColor(result.itemProp) }}>{result.itemProp.name[shortCode === 'cn' ? 'cns' : shortCode] ?? result.itemProp.name.en}</span>
+                                    <span style={{ color: Utils.getItemNameColor(result.itemProp) }}>{typeof result.itemProp.name === 'string' ? result.itemProp.name : (result.itemProp.name[shortCode === 'cn' ? 'cns' : shortCode] ?? result.itemProp.name.en)}</span>
                                 </div>
                             )
                         }
 
-                        {
-                            searchProperties.type == "monster" &&
-                            results.map(result =>
-                                <div id="search-result" key={result.monsterProp.id} onClick={() => handleItemClick(result)} tabIndex={0}
-                                    onKeyDown={(e) => {
-                                        if (e.key == "Enter") {
-                                            handleItemClick(result);
-                                        }
-                                        if (e.key == "ArrowDown") {
-                                            e.currentTarget.nextSibling && e.currentTarget.nextSibling.focus();
-                                        }
-                                        if (e.key == "ArrowUp") {
-                                            e.currentTarget.previousSibling && e.currentTarget.previousSibling.focus();
-                                        }
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    <img style={{ width: 32, height: 32, objectFit: "contain" }} src={`https://api.flyff.com/image/monster/${result.monsterProp.icon}`} alt={result.monsterProp.name.en} />
-                                    <span>{result.monsterProp.name[shortCode] ?? result.monsterProp.name.en} (level {result.monsterProp.level})</span>
-                                </div>
-                            )
-                        }
+
 
                         {
                             (searchProperties.type == "skill" || searchProperties.type == "personalOrCoupleHousingNpc" || searchProperties.type == "guildHousingNpc") &&

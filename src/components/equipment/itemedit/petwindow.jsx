@@ -74,7 +74,7 @@ function PetWindow({ raisedPetDefinition, petLevels, editable = false, onEditLev
 
     return (
         <div className="pet-edit">
-            <div className="window-title">{items ? (items[raisedPetDefinition.petItemId].name[shortLanguageCode] ?? items[raisedPetDefinition.petItemId].name.en) : 'Loading...'}</div>
+            <div className="window-title">{items ? (typeof items[raisedPetDefinition.petItemId].name === 'string' ? items[raisedPetDefinition.petItemId].name : (items[raisedPetDefinition.petItemId].name[shortLanguageCode] ?? items[raisedPetDefinition.petItemId].name.en)) : 'Loading...'}</div>
             <div className="window-content">
                 <div id="base-container">
                     <div id="image-container" ref={slotRef}

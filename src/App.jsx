@@ -22,36 +22,16 @@ function App() {
   const [isImporting, setIsImporting] = useState(false);
   const [loadedBuild, setLoadedBuild] = useState(null);
   const [state, setState] = useState(false); // To force re-render. this is probably bad design but i dont care
-  const [isLoading, setIsLoading] = useState(true);
-  const [itemsProgress, setItemsProgress] = useState(0);
-  const [monstersProgress, setMonstersProgress] = useState(0);
-  const [loadingMessage, setLoadingMessage] = useState('正在初始化...');
   const { t, i18n } = useTranslation();
 
-  // 预加载Items和Monsters数据，提升用户体验
+  // 预加载Items数据，提升用户体验
   useEffect(() => {
     async function preloadData() {
       try {
-        setLoadingMessage('正在下载装备数据...');
-        await Promise.all([
-          Utils.loadItemsData((progress) => {
-            setItemsProgress(progress);
-            if (progress === 100) {
-              setLoadingMessage('正在下载怪物数据...');
-            }
-          }),
-          Utils.loadMonstersData((progress) => {
-            setMonstersProgress(progress);
-          })
-        ]);
-        setLoadingMessage('加载完成！');
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        await Utils.loadItemsData();
         console.log('数据预加载完成');
       } catch (error) {
         console.error('数据预加载失败:', error);
-        setLoadingMessage('加载失败，请刷新页面重试');
       }
     }
     preloadData();
@@ -225,101 +205,7 @@ function App() {
     }
   }
 
-  // 加载界面
-  if (isLoading) {
-    return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#1a1a2e',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 9999
-      }}>
-        <div style={{
-          fontSize: '24px',
-          color: '#ffd700',
-          marginBottom: '30px',
-          fontWeight: 'bold'
-        }}>
-          飞飞角色装备和加点模拟器
-        </div>
-        <div style={{
-          fontSize: '18px',
-          color: '#ffffff',
-          marginBottom: '20px'
-        }}>
-          {loadingMessage}
-        </div>
-        
-        {/* 装备数据进度条 */}
-        <div style={{ width: '400px', marginBottom: '15px' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '5px',
-            color: '#ffffff'
-          }}>
-            <span>装备数据</span>
-            <span>{itemsProgress}%</span>
-          </div>
-          <div style={{
-            width: '100%',
-            height: '20px',
-            backgroundColor: '#333333',
-            borderRadius: '10px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${itemsProgress}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, #ff6b6b, #ffd700)',
-              transition: 'width 0.3s ease'
-            }}></div>
-          </div>
-        </div>
-        
-        {/* 怪物数据进度条 */}
-        <div style={{ width: '400px', marginBottom: '30px' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '5px',
-            color: '#ffffff'
-          }}>
-            <span>怪物数据</span>
-            <span>{monstersProgress}%</span>
-          </div>
-          <div style={{
-            width: '100%',
-            height: '20px',
-            backgroundColor: '#333333',
-            borderRadius: '10px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${monstersProgress}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, #4ecdc4, #45b7d1)',
-              transition: 'width 0.3s ease'
-            }}></div>
-          </div>
-        </div>
-        
-        <div style={{
-          fontSize: '14px',
-          color: '#888888'
-        }}>
-          首次加载需要下载约70MB数据，请耐心等待...
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <TooltipProvider>

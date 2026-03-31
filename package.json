@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build:win",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --message \"Deploy\" --no-history"
   },
   "dependencies": {
     "@react-three/drei": "^9.117.3",

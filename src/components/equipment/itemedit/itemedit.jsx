@@ -326,7 +326,7 @@ function ItemEdit({ itemElem }) {
                     if (shortCode === 'cn') {
                         itemNameLangKey = 'cns'; // Items.json中使用cns作为中文键
                     }
-                    return itemElem.itemProp.name[itemNameLangKey] ?? itemElem.itemProp.name.en;
+                    return typeof itemElem.itemProp.name === 'string' ? itemElem.itemProp.name : (itemElem.itemProp.name[itemNameLangKey] ?? itemElem.itemProp.name.en);
                 })()}
 
                 {
@@ -335,13 +335,10 @@ function ItemEdit({ itemElem }) {
                 }
             </div>
             <p style={{ maxWidth: "300px", fontStyle: "italic", margin: "0" }}>
-                {itemElem.itemProp.description.en != "null" && (() => {
+                {itemElem.itemProp.description && (() => {
                     // 处理技能描述的中文特殊情况
-                    let descLangKey = shortCode;
-                    if (shortCode === 'cn') {
-                        descLangKey = 'cns'; // Skills.json中使用cns作为中文键
-                    }
-                    return itemElem.itemProp.description[descLangKey] ?? itemElem.itemProp.description.en;
+                    const desc = typeof itemElem.itemProp.description === 'string' ? itemElem.itemProp.description : (itemElem.itemProp.description.cns || itemElem.itemProp.description.tw || itemElem.itemProp.description.en);
+                    return desc && desc !== "null" ? desc : null;
                 })()}
             </p>
             {
