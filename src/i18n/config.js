@@ -32,7 +32,7 @@ i18n
     debug: false,
 
     backend: {
-      loadPath: '/flyff-calc/locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
 
     // Normally, we want `escapeValue: true` as it
