@@ -14,22 +14,58 @@ export const BASE_PATH = '/flyff-calc';
 let items = null;
 let monsters = null;
 
-export async function loadItemsData() {
+// 带进度的fetch函数
+async function fetchWithProgress(url, onProgress) {
+  const response = await fetch(url, {
+    cache: 'force-cache'
+  });
+  
+  if (!response.body) {
+    // 如果没有可读流，直接返回
+    const data = await response.json();
+    if (onProgress) onProgress(100);
+    return data;
+  }
+
+  const contentLength = response.headers.get('content-length');
+  const total = contentLength ? parseInt(contentLength, 10) : 0;
+  let loaded = 0;
+
+  const reader = response.body.getReader();
+  const chunks = [];
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    loaded += value.length;
+    if (total && onProgress) {
+      const progress = Math.round((loaded / total) * 100);
+      onProgress(progress);
+    }
+  }
+
+  const blob = new Blob(chunks);
+  const text = await blob.text();
+  const data = JSON.parse(text);
+  if (onProgress) onProgress(100);
+  return data;
+}
+
+export async function loadItemsData(onProgress) {
   if (!items) {
-    const response = await fetch(`${BASE_PATH}/data/Items.json`, {
-      cache: 'force-cache'
-    });
-    items = await response.json();
+    items = await fetchWithProgress(`${BASE_PATH}/data/Items.json`, onProgress);
+  } else if (onProgress) {
+    onProgress(100);
   }
   return items;
 }
 
-export async function loadMonstersData() {
+export async function loadMonstersData(onProgress) {
   if (!monsters) {
-    const response = await fetch(`${BASE_PATH}/data/Monsters.json`, {
-      cache: 'force-cache'
-    });
-    monsters = await response.json();
+    monsters = await fetchWithProgress(`${BASE_PATH}/data/Monsters.json`, onProgress);
+  } else if (onProgress) {
+    onProgress(100);
   }
   return monsters;
 }
