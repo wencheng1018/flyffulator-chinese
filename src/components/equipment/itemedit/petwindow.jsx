@@ -1,21 +1,32 @@
 import { Canvas } from '@react-three/fiber';
 import { useTranslation } from "react-i18next";
 import { useTooltip } from '../../../tooltipcontext';
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { createTooltip } from '../../../flyff/flyfftooltip';
 
 import PetTier from "./pettier";
 import Loader from "../../shared/fallbackloader";
 import PlayerModel from "../../base/playermodel";
-import items from "../../../assets/Items.json";
 import Context from "../../../flyff/flyffcontext";
 import * as Utils from "../../../flyff/flyffutils";
 
 function PetWindow({ raisedPetDefinition, petLevels, editable = false, onEditLevels = null }) {
     const { showTooltip, hideTooltip } = useTooltip();
     const [currentlyEditingTier, setEditingTier] = useState(null);
+    const [items, setItems] = useState(null);
     const slotRef = useRef(null);
     const { i18n } = useTranslation();
+
+    // 加载items数据
+    useEffect(() => {
+        async function loadData() {
+            if (!items) {
+                const data = await Utils.loadItemsData();
+                setItems(data);
+            }
+        }
+        loadData();
+    }, [items]);
     var shortLanguageCode = "en";
     if (i18n.resolvedLanguage) {
         shortLanguageCode = i18n.resolvedLanguage.split('-')[0];
@@ -63,7 +74,7 @@ function PetWindow({ raisedPetDefinition, petLevels, editable = false, onEditLev
 
     return (
         <div className="pet-edit">
-            <div className="window-title">{items[raisedPetDefinition.petItemId].name[shortLanguageCode] ?? items[raisedPetDefinition.petItemId].name.en}</div>
+            <div className="window-title">{items ? (items[raisedPetDefinition.petItemId].name[shortLanguageCode] ?? items[raisedPetDefinition.petItemId].name.en) : 'Loading...'}</div>
             <div className="window-content">
                 <div id="base-container">
                     <div id="image-container" ref={slotRef}

@@ -1,15 +1,32 @@
 import ItemElem from "./flyffitemelem";
 import pets from "../assets/Pets.json";
-import items from "../assets/Items.json";
 import skills from "../assets/Skills.json";
 import classes from "../assets/Classes.json";
-import monsters from "../assets/Monsters.json"
 import equipSets from "../assets/EquipSets.json";
 import statNames from '../assets/StatNames.json';
 import statAwakes from "../assets/StatAwakes.json";
 import partySkills from "../assets/PartySkills.json";
 import upgradeBonus from "../assets/UpgradeBonus.json";
 import levelDifferencePenalties from "../assets/LevelDifferencePenalties.json";
+
+let items = null;
+let monsters = null;
+
+export async function loadItemsData() {
+  if (!items) {
+    const response = await fetch('/flyffulator-chinese/data/Items.json');
+    items = await response.json();
+  }
+  return items;
+}
+
+export async function loadMonstersData() {
+  if (!monsters) {
+    const response = await fetch('/flyffulator-chinese/data/Monsters.json');
+    monsters = await response.json();
+  }
+  return monsters;
+}
 
 export const DEFAULT_WEAPON = new ItemElem({
     id: -1,
@@ -73,7 +90,8 @@ export function getClassById(id) {
     return classes[id];
 }
 
-export function getItemById(id) {
+export async function getItemById(id) {
+    await loadItemsData();
     return items[id];
 }
 
@@ -85,7 +103,8 @@ export function getPartySkillById(id) {
     return partySkills[id];
 }
 
-export function getMonsterById(id) {
+export async function getMonsterById(id) {
+    await loadMonstersData();
     return monsters[id];
 }
 
@@ -116,7 +135,8 @@ export function getStatNameByIdOrDefault(id, i18n) {
     return stat[statLanguageCode] ?? stat.en;
 }
 
-export function getMonsterRange(startLevel, endLevel) {
+export async function getMonsterRange(startLevel, endLevel) {
+    await loadMonstersData();
     return Object.values(monsters).filter((m) => m.level >= startLevel && m.level <= endLevel);
 }
 
