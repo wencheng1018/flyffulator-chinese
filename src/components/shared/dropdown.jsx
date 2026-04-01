@@ -29,12 +29,12 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
         }
 
         if (opened) {
-            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("mouseup", handleClickOutside);
             document.addEventListener("touchstart", handleClickOutside);
         }
 
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mouseup", handleClickOutside);
             document.removeEventListener("touchstart", handleClickOutside);
         };
     }, [opened]);
@@ -105,13 +105,14 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
                             <div 
                                 key={key} 
                                 className={`dropdown-option ${key === valueKey ? 'selected' : ''} ${key.startsWith('group_') ? 'dropdown-group-header' : ''}`}
-                                style={{ position: "relative", fontSize: '13px' }}
+                                style={{ position: "relative", fontSize: '13px', cursor: key.startsWith('group_') ? 'default' : 'pointer' }}
+                                onClick={() => !key.startsWith('group_') && selectOption(key)}
                             >
                                 {key.startsWith('group_') ? (
                                     <div style={{ fontWeight: 'bold', color: '#d386ff', padding: '4px 0', fontSize: '14px' }}>{options[key]}</div>
                                 ) : (
                                     <>
-                                        <div onClick={() => selectOption(key)} style={{ paddingLeft: '16px' }}>{options[key]}</div>
+                                        <div style={{ paddingLeft: '16px' }}>{options[key]}</div>
                                         {
                                             onRemove != undefined &&
                                             <button className="flyff-close-button right" onClick={(e) => removeOption(e, key)}>
