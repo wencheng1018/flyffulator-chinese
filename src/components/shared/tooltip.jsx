@@ -1,80 +1,43 @@
 import { useTooltip } from "../../tooltipcontext";
-import { useRef, useEffect, useState } from 'react';
 
 function Tooltip() {
     const { isTooltipOpen, tooltipContent } = useTooltip();
-    const tooltipRef = useRef(null);
-    const [position, setPosition] = useState({ left: 0, top: 0 });
 
     if (!isTooltipOpen) {
         return null;
     }
 
-    useEffect(() => {
-        if (tooltipRef.current && tooltipContent) {
-            const tooltipRect = tooltipRef.current.getBoundingClientRect();
-            const triggerRect = tooltipContent.rect;
-            const margin = 10;
-            const gap = 5;
+    // 计算tooltip的位置，确保不超出屏幕范围
+    const tooltipWidth = 300; // 预估的tooltip最大宽度
+    const tooltipHeight = 400; // 预估的tooltip最大高度
+    const margin = 10; // 距离屏幕边缘的最小边距
 
-            let left = triggerRect.right + gap;
-            let top = triggerRect.top;
+    let left = tooltipContent.rect.x + tooltipContent.rect.width + 5;
+    let top = tooltipContent.rect.y;
 
-            // 检查右边是否超出屏幕
-            if (left + tooltipRect.width > window.innerWidth - margin) {
-                // 如果右边超出，尝试显示在左边
-                left = triggerRect.left - tooltipRect.width - gap;
-                // 如果左边也超出，则调整到屏幕内
-                if (left < margin) {
-                    left = margin;
-                }
-            }
-
-            // 检查下边是否超出屏幕
-            if (top + tooltipRect.height > window.innerHeight - margin) {
-                // 如果下边超出，调整top位置，让tooltip从下方往上显示
-                top = window.innerHeight - tooltipRect.height - margin;
-            }
-
-            // 检查上边是否超出屏幕
-            if (top < margin) {
-                top = margin;
-            }
-
-            // 如果在左右都无法放下，则显示在上方或下方
-            if (left + tooltipRect.width > window.innerWidth - margin && triggerRect.left - tooltipRect.width - gap < margin) {
-                // 左右都放不下，尝试放在上方
-                left = triggerRect.left;
-                top = triggerRect.top - tooltipRect.height - gap;
-                
-                // 如果上方也放不下，放在下方
-                if (top < margin) {
-                    top = triggerRect.bottom + gap;
-                }
-
-                // 再次检查左右是否超出
-                if (left + tooltipRect.width > window.innerWidth - margin) {
-                    left = window.innerWidth - tooltipRect.width - margin;
-                }
-                if (left < margin) {
-                    left = margin;
-                }
-            }
-
-            setPosition({ left, top });
+    // 检查右边是否超出屏幕
+    if (left + tooltipWidth > window.innerWidth - margin) {
+        // 如果右边超出，显示在左边
+        left = tooltipContent.rect.x - tooltipWidth - 5;
+        // 如果左边也超出，则显示在右边但调整位置
+        if (left < margin) {
+            left = window.innerWidth - tooltipWidth - margin;
         }
-    }, [isTooltipOpen, tooltipContent]);
+    }
+
+    // 检查下边是否超出屏幕
+    if (top + tooltipHeight > window.innerHeight - margin) {
+        // 如果下边超出，调整top位置
+        top = window.innerHeight - tooltipHeight - margin;
+    }
+
+    // 检查上边是否超出屏幕
+    if (top < margin) {
+        top = margin;
+    }
 
     return (
-        <div 
-            className="tooltip" 
-            ref={tooltipRef}
-            style={{
-                left: position.left, 
-                top: position.top,
-                visibility: tooltipRef.current ? 'visible' : 'hidden'
-            }}
-        >
+        <div className="tooltip" style={{left: left, top: top}}>
             {tooltipContent.text}
         </div>
     );
