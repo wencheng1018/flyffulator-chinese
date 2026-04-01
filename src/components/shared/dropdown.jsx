@@ -99,24 +99,13 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
             </div>
             {
                 opened &&
-                <div className="flyff-dropdown-options" style={{ ...dropdownStyle, minWidth: '200px', position: 'relative' }} ref={dropdownRef}>
-                    {/* 战士系转职连接线 */}
-                    <svg style={{ position: 'absolute', top: 0, left: '12px', width: '16px', height: '100%', pointerEvents: 'none', zIndex: 0 }}>
-                        {/* 战士 -> 骑士 */}
-                        <path d="M 0 32 L 0 40 L 8 40" stroke="rgba(255,215,0,0.35)" strokeWidth="0.8" strokeDasharray="1.5,1.5" fill="none" />
-                        {/* 战士 -> 刀锋战士 */}
-                        <path d="M 0 32 L 0 60 L 8 60" stroke="rgba(255,215,0,0.35)" strokeWidth="0.8" strokeDasharray="1.5,1.5" fill="none" />
-                        {/* 骑士 -> 圣殿骑士 */}
-                        <path d="M 0 52 L 0 80 L 8 80" stroke="rgba(255,215,0,0.35)" strokeWidth="0.8" strokeDasharray="1.5,1.5" fill="none" />
-                        {/* 刀锋战士 -> 屠戮者 */}
-                        <path d="M 0 72 L 0 100 L 8 100" stroke="rgba(255,215,0,0.35)" strokeWidth="0.8" strokeDasharray="1.5,1.5" fill="none" />
-                    </svg>
+                <div className="flyff-dropdown-options" style={{ ...dropdownStyle, minWidth: '200px' }} ref={dropdownRef}>
                     {
                         (orderedKeys ? orderedKeys : Object.keys(options)).map((key) => (
                             <div 
                                 key={key} 
                                 className={`dropdown-option ${key === valueKey ? 'selected' : ''} ${key.startsWith('group_') ? 'dropdown-group-header' : ''}`}
-                                style={{ position: "relative", fontSize: '13px', zIndex: 1 }}
+                                style={{ position: "relative", fontSize: '13px' }}
                             >
                                 {key.startsWith('group_') ? (
                                     <div style={{ fontWeight: 'bold', color: '#d386ff', padding: '4px 0', fontSize: '14px' }}>{options[key]}</div>

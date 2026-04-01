@@ -209,7 +209,6 @@ img.info-icon {
   font-weight: 600;
   user-select: none;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   width: fit-content;
   min-width: 120px;
   transition: all 0.2s ease;
@@ -217,14 +216,13 @@ img.info-icon {
   &:hover {
     cursor: pointer;
     border-color: v.$border-color;
-    box-shadow: 0 0 8px rgba(246, 204, 77, 0.3);
   }
 
   .flyff-dropdown-arrow {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: v.$border-color;
+    color: v.$accent-color;
     gap: 15px;
     min-height: 24px;
 
@@ -241,7 +239,7 @@ img.info-icon {
       border: 1px solid v.$input-border-color;
       border-radius: 3px;
       padding: 2px;
-      background: linear-gradient(160deg, #ffffff80 0%, #00000000 50%);
+      background: v.$fg2-color;
       transition: transform 0.2s ease;
       flex-shrink: 0;
     }
@@ -257,7 +255,6 @@ img.info-icon {
     max-height: 280px;
     overflow-y: auto;
     z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     margin-top: 2px;
 
     .dropdown-option {
@@ -268,12 +265,12 @@ img.info-icon {
       justify-content: space-between;
 
       &:hover {
-        background-color: rgba(246, 204, 77, 0.15);
+        background-color: v.$fg2-color;
         cursor: pointer;
       }
 
       &.selected {
-        background-color: rgba(246, 204, 77, 0.25);
+        background-color: v.$fg2-color;
         color: v.$accent-color;
       }
 
@@ -336,13 +333,11 @@ button.flyff-close-button {
 button.flyff-button {
   padding: 3px 25px;
   border-radius: 5px;
-  background: linear-gradient(180deg, rgba(255, 236, 194, 1) 0%, rgba(236, 202, 116, 1) 48%, rgba(230, 191, 95, 1) 51%, rgba(230, 191, 95, 1) 78%, rgba(255, 236, 194, 1) 100%);
-  border: 2px solid black;
-  outline: 1px solid v.$border-color-light;
+  background: #F2D4B7;
+  border: 1px solid #D4B894;
   transition: 0.2s;
   font-weight: 600;
-  text-shadow: 0 0 2px white;
-  color: black;
+  color: #5A3E2B;
   user-select: none;
 
   &.icon {
@@ -363,16 +358,14 @@ button.flyff-button {
 
   &:hover {
     &:not(:disabled) {
-      box-shadow: inset 0 0 25px #f5ebbd;
-      color: rgb(61, 61, 61);
+      background: #E8C4A7;
       cursor: pointer;
     }
   }
 
   &:active {
     &:not(:disabled) {
-      box-shadow: inset 0 0 10px black;
-      color: black;
+      background: #D4B894;
     }
   }
 
@@ -430,11 +423,10 @@ button.flyff-button {
   text-align: center;
   padding: 0px;
   font-weight: 400;
-  text-shadow: 0 0px 3px black, 0 0 3px black, 0 0 3px black, 0 0 10px black;
-  box-shadow: inset 0 4px 0px v.$soft-border-color;
   line-height: 18px;
   border-radius: 4px;
-  background: linear-gradient(145deg, #ffffff50 0%, #00000000 4%), linear-gradient(215deg, #ffffff50 0%, #00000000 4%);
+  background: #F2D4B7;
+  color: #5A3E2B;
 }
 
 .window-content {
@@ -469,19 +461,16 @@ button.flyff-button {
 
 .search-modal {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.733);
+  background-color: rgba(245, 240, 230, 0.733);
   width: 100%;
   height: 100%;
   z-index: 2000;
   top: 0;
   left: 0;
-  backdrop-filter: blur(3px);
 
   #search-box {
     background-color: v.$fg-color;
-    border: 2px solid v.$soft-border-color;
-    outline: 1px solid v.$border-color;
-    box-shadow: 0 0 15px black;
+    border: 1px solid v.$border-color;
     border-radius: 4px;
     width: 25%;
     margin-left: auto;
@@ -504,7 +493,7 @@ button.flyff-button {
         &:hover,
         &:focus {
           cursor: pointer;
-          background-color: v.$bg-color;
+          background-color: v.$fg2-color;
           outline: none;
         }
       }
