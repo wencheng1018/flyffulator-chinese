@@ -493,7 +493,7 @@ function setupItem(itemElem, i18n) {
             if (shortLanguageCode === 'cn') {
                 skillLangKey = 'cns'; // Skills.json中使用cns作为中文键
             }
-            out.push(<span style={{ color: "#ff007b" }}><br />{skill.name && (skill.name[skillLangKey] ?? skill.name.en)} damage+{itemElem.skillAwake.add}%</span>)
+            out.push(<span style={{ color: "#ff007b" }}><br />{skill.name && (skill.name[skillLangKey] ?? skill.name.en)} 伤害+{itemElem.skillAwake.add}%</span>)
         }
         else if (itemElem.skillAwake.parameter != undefined) {
             out.push(<span style={{ color: "#ff007b" }}><br />{Utils.getStatNameByIdOrDefault(itemElem.skillAwake.parameter, i18n)}+{itemElem.skillAwake.add}%</span>)
