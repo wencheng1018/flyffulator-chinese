@@ -729,7 +729,7 @@
 		"en": "Additional Damage",
 		"ar": "Additional Damage",
 		"br": "Dano Adicional",
-		"cns": "追加伤害",
+		"cns": "伤害",
 		"de": "Zusätzl. Schaden",
 		"fi": "Additional Damage",
 		"fil": "Dagdag damage",
@@ -744,7 +744,7 @@
 		"sp": "Daño Adicional",
 		"sw": "Additional Damage",
 		"th": "เพิ่มพลังการโจมตี",
-		"tw": "追加傷害值",
+		"tw": "傷害",
 		"vi": "Sát thương thêm vào"
 	},
 	"criticalchance": {
