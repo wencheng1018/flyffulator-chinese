@@ -278,19 +278,18 @@ function App() {
       <SearchProvider>
         <div className="app">
           <div id="build-header">
-            <img src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
-            <div id="build-job" style={{ fontWeight: "200", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <img id="build-job-icon" src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
+            <div id="build-job">
+              <div className="build-job-row">
                 <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} orderedKeys={orderedJobIds} />
               </div>
-              {t("flyff_universe_character_simulator")}
+              <div className="build-job-text">{t("flyff_universe_character_simulator")}</div>
               {
                 Object.entries(buildOptions).length > 0 &&
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  {t("loaded_build")}
+                <div className="build-job-row">
+                  <span className="build-job-label">{t("loaded_build")}</span>
                   <Dropdown onRemove={removeBuild} options={buildOptions} onSelectionChanged={loadBuild} valueKey={loadedBuild} />
                 </div>
-
               }
             </div>
             <div id="build-stats">
