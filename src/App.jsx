@@ -23,7 +23,6 @@ function App() {
   const [loadedBuild, setLoadedBuild] = useState(null);
   const [state, setState] = useState(false); // To force re-render. this is probably bad design but i dont care
   const { t, i18n } = useTranslation();
-  const AUTO_SAVE_KEY = 'flyff_calc_auto_save';
 
   // 预加载Items数据，提升用户体验
   useEffect(() => {
@@ -37,13 +36,6 @@ function App() {
     }
     preloadData();
   }, []);
-
-  // 每次状态变化时自动保存（包括装备修改）
-  useEffect(() => {
-    if (loadedBuild !== null) {
-      autoSave();
-    }
-  }, [state]);
 
   const lang = i18n.resolvedLanguage || 'zh-CN';
   console.log('Current language:', lang);
@@ -143,11 +135,6 @@ function App() {
     Context.player.skillLevels = {};
 
     setState(!state); // Just to re-render...
-    autoSave();
-  }
-
-  function autoSave() {
-    localStorage.setItem(AUTO_SAVE_KEY, Context.player.serialize());
   }
 
   function setPlayerStat(statKey, statValue) {
@@ -169,7 +156,6 @@ function App() {
       }
 
       setState(!state); // Just to re-render...
-      autoSave();
     }
   }
 
@@ -198,7 +184,6 @@ function App() {
     const key = `${buildName}_${Utils.getGuid()}`;
     localStorage.setItem(key, Context.player.serialize());
     loadBuild(key);
-    autoSave();
   }
 
   const buildOptions = {};
@@ -224,30 +209,11 @@ function App() {
     const key = `${buildName}_${Utils.getGuid()}`;
     localStorage.setItem(key, Context.player.serialize());
     loadBuild(key);
-    autoSave();
   }
 
   function loadBuild(key) {
     Context.player.unserialize(localStorage.getItem(key));
     setLoadedBuild(key);
-    setState(!state);
-  }
-
-  function resetToInitial() {
-    // 恢复初始数据
-    Context.player.job = Utils.getClassById('9686'); // 初心者
-    Context.player.level = 15;
-    Context.player.str = 15;
-    Context.player.sta = 15;
-    Context.player.dex = 15;
-    Context.player.int = 15;
-    Context.player.resetEquipment();
-    Context.player.skillLevels = {};
-    
-    // 移除自动保存
-    localStorage.removeItem(AUTO_SAVE_KEY);
-    
-    setLoadedBuild(null);
     setState(!state);
   }
 
@@ -272,23 +238,15 @@ function App() {
       localStorage.removeItem(key);
     }
 
-    // 优先加载自动保存的内容
-    const autoSaveContent = localStorage.getItem(AUTO_SAVE_KEY);
-    if (autoSaveContent) {
-      Context.player.unserialize(autoSaveContent);
-      setLoadedBuild(AUTO_SAVE_KEY);
-    } else {
-      // 如果没有自动保存，则加载其他保存的构建
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("i18next")) {
-          continue;
-        }
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("i18next")) {
+        continue;
+      }
 
-        if (key) {
-          loadBuild(localStorage.key(i));
-          break;
-        }
+      if (key) {
+        loadBuild(localStorage.key(i));
+        break;
       }
     }
   }
@@ -320,23 +278,7 @@ function App() {
       <SearchProvider>
         <div className="app">
           <div id="build-header">
-            <div style={{ position: 'relative' }}>
-              <img src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
-              <button 
-                className='flyff-button small' 
-                onClick={resetToInitial}
-                style={{
-                  position: 'absolute',
-                  bottom: '4px',
-                  right: '4px',
-                  fontSize: '11px',
-                  padding: '2px 6px',
-                  minWidth: 'auto'
-                }}
-              >
-                清空
-              </button>
-            </div>
+            <img src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
             <div id="build-job" style={{ fontWeight: "200", display: "flex", flexDirection: "column", gap: "8px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} orderedKeys={orderedJobIds} />
