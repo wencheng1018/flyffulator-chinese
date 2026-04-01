@@ -53,6 +53,11 @@ function SkillTree() {
         setRefresh(!refresh);
     }
 
+    function clearTree() {
+        Context.player.skillLevels = {};
+        setRefresh(!refresh);
+    }
+
     function addBuffItem() {
         showSearch({
             type: "item",
@@ -187,9 +192,10 @@ function SkillTree() {
         <div className="skill-tree">
             <div id="skill-tree-base">
                 <div style={{ position: "relative" }}>
-                    <div id="skill-points">
+                    <div id="skill-points" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <i style={{ color: Context.player.getRemainingSkillPoints() < 0 ? "red" : "inherit" }}>{Context.player.getRemainingSkillPoints()} {t("skills_and_buffs_skills_points_available")}</i>
                         <HoverInfo text={"你剩余的技能点数。\n\n虽然在游戏中你不能将技能点数分配到负数，但在此页面上你可以分配超过你拥有的点数。"} />
+                        <button className="flyff-button" onClick={clearTree}>清空</button>
                     </div>
                     <div style={{ marginBottom: "10px", color: "#aaa", fontSize: "0.9em" }}>
                         左键增加技能点，右键减少技能点
