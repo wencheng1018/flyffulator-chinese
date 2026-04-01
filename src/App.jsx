@@ -75,17 +75,19 @@ function App() {
   const orderedJobIds = [];
   
   // 按顺序添加职业
+  let currentGroup = '';
   for (const jobInfo of jobOrderWithInfo) {
     if (Classes[jobInfo.id]) {
       let displayName = jobInfo.name;
       if (jobInfo.tier) {
         displayName = `${jobInfo.tier}${displayName}`;
       }
-      if (jobInfo.group && !jobOptions[jobInfo.group]) {
+      if (jobInfo.group && jobInfo.group !== currentGroup) {
         // 添加分系标题
         const groupKey = `group_${jobInfo.group}`;
         jobOptions[groupKey] = jobInfo.group;
         orderedJobIds.push(groupKey);
+        currentGroup = jobInfo.group;
       }
       jobOptions[jobInfo.id] = displayName;
       orderedJobIds.push(jobInfo.id);

@@ -108,10 +108,10 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
                                 style={{ position: "relative" }}
                             >
                                 {key.startsWith('group_') ? (
-                                    <div style={{ fontWeight: 'bold', color: '#d386ff' }}>{options[key]}</div>
+                                    <div style={{ fontWeight: 'bold', color: '#d386ff', padding: '4px 0' }}>{options[key]}</div>
                                 ) : (
                                     <>
-                                        <div onClick={() => selectOption(key)}>{options[key]}</div>
+                                        <div onClick={() => selectOption(key)} style={{ paddingLeft: '16px' }}>{options[key]}</div>
                                         {
                                             onRemove != undefined &&
                                             <button className="flyff-close-button right" onClick={(e) => removeOption(e, key)}>
