@@ -53,8 +53,10 @@ function SkillTree() {
         setRefresh(!refresh);
     }
 
-    function clearTree() {
-        Context.player.skillLevels = {};
+    function clearTree(classId) {
+        Utils.getClassSkills(classId).forEach((skill) => {
+            delete Context.player.skillLevels[skill.id];
+        });
         setRefresh(!refresh);
     }
 
@@ -192,10 +194,9 @@ function SkillTree() {
         <div className="skill-tree">
             <div id="skill-tree-base">
                 <div style={{ position: "relative" }}>
-                    <div id="skill-points" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div id="skill-points">
                         <i style={{ color: Context.player.getRemainingSkillPoints() < 0 ? "red" : "inherit" }}>{Context.player.getRemainingSkillPoints()} {t("skills_and_buffs_skills_points_available")}</i>
                         <HoverInfo text={"你剩余的技能点数。\n\n虽然在游戏中你不能将技能点数分配到负数，但在此页面上你可以分配超过你拥有的点数。"} />
-                        <button className="flyff-button" onClick={clearTree}>清空</button>
                     </div>
                     <div style={{ marginBottom: "10px", color: "#aaa", fontSize: "0.9em" }}>
                         左键增加技能点，右键减少技能点
@@ -214,7 +215,10 @@ function SkillTree() {
                                             }
                                             return c.name && (c.name[langKey] || (lang && c.name[lang.split('-')[0]]) || c.name.en);
                                         })()} {t('skills')}</h3>
-                                        <button className="flyff-button" onClick={() => maxTree(c.id)}>{t('max')}</button>
+                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                            <button className="flyff-button" onClick={() => clearTree(c.id)}>清空</button>
+                                            <button className="flyff-button" onClick={() => maxTree(c.id)}>{t('max')}</button>
+                                        </div>
                                     </div>
                                     <hr />
                                     <div style={{ position: "relative" }}>

@@ -274,7 +274,7 @@ function Search() {
             <div id="search-box" onClick={(e) => e.stopPropagation()}>
                 <div className="window-title">{i18n.t("search_title")}</div>
                 <div className="window-content">
-                    <input type="text" name="query" autoFocus id="search-field" placeholder={i18n.t("search_placeholder", { type: searchProperties.typeLocalization ? (i18n.t(searchProperties.typeLocalization)) : searchProperties.type, })} onChange={e => performSearch(e.target.value)} />
+                    <input type="text" name="query" autoFocus id="search-field" placeholder={searchProperties.type === "item" ? "搜索装备..." : i18n.t("search_placeholder", { type: searchProperties.typeLocalization ? (i18n.t(searchProperties.typeLocalization)) : searchProperties.type, })} onChange={e => performSearch(e.target.value)} />
                     {isLoading && <div>Loading...</div>}
                     {
                         !isLoading && results.length > 0 &&
