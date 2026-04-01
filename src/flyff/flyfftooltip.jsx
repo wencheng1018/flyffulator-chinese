@@ -214,7 +214,7 @@ function setupItem(itemElem, i18n) {
         && itemProp.category != "buff"
         && itemProp.category != "scroll"
         && itemProp.abilities != undefined) {
-        const abilityStyle = { color: "#ffeaa1" };
+        const abilityStyle = { color: "#5A3E2B" };
 
         if (itemElem.statRanges.length == 0) {
             for (const ability of itemProp.abilities) {
@@ -259,7 +259,7 @@ function setupItem(itemElem, i18n) {
     // Jewelery stats
 
     if (itemProp.category == "jewelry" && itemProp.upgradeLevels != undefined) {
-        const abilityStyle = { color: "#ffeaa1" };
+        const abilityStyle = { color: "#5A3E2B" };
         for (const ability of itemProp.upgradeLevels[itemElem.upgradeLevel].abilities) {
             out.push(<span style={abilityStyle}><br />{Utils.getStatNameByIdOrDefault(ability.parameter, i18n)}+{ability.add}</span>);
             if (ability.rate) {
@@ -308,7 +308,7 @@ function setupItem(itemElem, i18n) {
     // Couple
 
     if (itemProp.subcategory == "couplering") {
-        const style = { color: "#d386ff" };
+        const style = { color: "#5A3E2B" };
         if (itemProp.coupleTeleports != undefined && itemProp.coupleTeleports > 0) {
             out.push(<span style={style}><br />{i18n.t("tooltip_couple_teleports")}: {itemProp.coupleTeleports}</span>);
         }
@@ -410,7 +410,7 @@ function setupItem(itemElem, i18n) {
 
     if (itemProp.category == "buff") {
         for (const ability of itemProp.abilities) {
-            out.push(<span style={{ color: "#ffeaa1" }}><br />{ability.parameter}+{ability.add}{ability.rate && "%"}</span>);
+            out.push(<span style={{ color: "#5A3E2B" }}><br />{ability.parameter}+{ability.add}{ability.rate && "%"}</span>);
         }
     }
 
@@ -448,7 +448,7 @@ function setupItem(itemElem, i18n) {
                 }
             }
 
-            const bonusStyle = { color: "#ff9d00" };
+            const bonusStyle = { color: "#5A3E2B" };
             const bonuses = {};
 
             // Accumulate all bonuses first then emit their sum
@@ -561,7 +561,7 @@ function setupSkill(skill, i18n) {
     if (shortLanguageCode === 'cn') {
         skillLangKey = 'cns'; // Skills.json中使用cns作为中文键
     }
-    out.push(<span style={{ color: "#2fbe6d", fontWeight: 600 }}>{skill.name && (skill.name[skillLangKey] ?? skill.name.en)}</span>);
+    out.push(<span style={{ color: "#5A3E2B", fontWeight: 600 }}>{skill.name && (skill.name[skillLangKey] ?? skill.name.en)}</span>);
     if (skillLevel != undefined) {
         out.push(`  Lv. ${skillLevel}`);
     }
@@ -739,7 +739,7 @@ function setupSkill(skill, i18n) {
     // Stats
     if (levelProp.abilities != undefined) {
         for (const ability of levelProp.abilities) {
-            const abilityStyle = { color: "#6161ff" };
+            const abilityStyle = { color: "#5A3E2B" };
             let add = ability.add;
             let extra = 0;
 
@@ -857,7 +857,7 @@ function setupPartySkill(partySkill, i18n) {
     if (shortLanguageCode === 'cn') {
         skillLangKey = 'cns'; // Skills.json中使用cns作为中文键
     }
-    out.push(<span style={{ color: "#2fbe6d", fontWeight: 600 }}>{partySkill.name && (partySkill.name[skillLangKey] ?? partySkill.name.en)}</span>);
+    out.push(<span style={{ color: "#5A3E2B", fontWeight: 600 }}>{partySkill.name && (partySkill.name[skillLangKey] ?? partySkill.name.en)}</span>);
     // 处理技能描述的中文特殊情况
     let descLangKey = shortLanguageCode;
     if (shortLanguageCode === 'cn') {
