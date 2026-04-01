@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useTooltip } from '../../tooltipcontext';
 import { createTooltip } from '../../flyff/flyfftooltip';
 import { useTranslation } from "react-i18next";
+import CachedImage from '../shared/CachedImage';
 
 function SkillTreeIcon({ skill, disabled, level, clickHandle, rightClickHandle }) {
     const { showTooltip, hideTooltip } = useTooltip();
@@ -45,7 +46,7 @@ function SkillTreeIcon({ skill, disabled, level, clickHandle, rightClickHandle }
             onMouseLeave={() => toggleTooltip(false)}
             ref={slotRef}
         >
-            <img
+            <CachedImage
                 key={skill.id}
                 src={`https://api.flyff.com/image/skill/colored/${skill.icon}`}
                 alt={(function() {
