@@ -55,13 +55,13 @@ function App() {
     { id: '9295', name: '游侠', tier: '[2转]', group: '弓箭手系' },
     { id: '3545', name: '暗杀者', tier: '[2转]', group: '弓箭手系' },
     { id: '20311', name: '小丑', tier: '[3转]', group: '弓箭手系' },
-    { id: '28613', name: '神枪手', tier: '[3转]', group: '弓箭手系' },
+    { id: '28695', name: '神枪手', tier: '[3转]', group: '弓箭手系' },
     // 圣职者系
     { id: '8962', name: '圣职者', tier: '[1转]', group: '圣职者系' },
     { id: '9389', name: '守护使者', tier: '[2转]', group: '圣职者系' },
     { id: '7424', name: '暴力技师', tier: '[2转]', group: '圣职者系' },
     { id: '21680', name: '炽天使', tier: '[3转]', group: '圣职者系' },
-    { id: '25644', name: '力量大师', tier: '[3转]', group: '圣职者系' },
+    { id: '23623', name: '力量大师', tier: '[3转]', group: '圣职者系' },
     // 魔导士系
     { id: '9581', name: '魔导士', tier: '[1转]', group: '魔导士系' },
     { id: '5709', name: '精神使者', tier: '[2转]', group: '魔导士系' },
