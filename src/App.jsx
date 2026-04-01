@@ -281,14 +281,14 @@ function App() {
             <img id="build-job-icon" src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
             <div id="build-job">
               <div className="build-job-row">
-                <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} orderedKeys={orderedJobIds} />
+                <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} orderedKeys={orderedJobIds} style={{ minWidth: '150px' }} />
+                <span className="build-job-text">{t("flyff_universe_character_simulator")}</span>
               </div>
-              <div className="build-job-text">{t("flyff_universe_character_simulator")}</div>
               {
                 Object.entries(buildOptions).length > 0 &&
                 <div className="build-job-row">
+                  <Dropdown onRemove={removeBuild} options={buildOptions} onSelectionChanged={loadBuild} valueKey={loadedBuild} style={{ minWidth: '150px' }} />
                   <span className="build-job-label">{t("loaded_build")}</span>
-                  <Dropdown onRemove={removeBuild} options={buildOptions} onSelectionChanged={loadBuild} valueKey={loadedBuild} />
                 </div>
               }
             </div>

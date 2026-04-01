@@ -82,7 +82,7 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
     }
 
     return (
-        <div className="flyff-dropdown" style={{ ...style, minWidth: '200px' }} ref={containerRef}>
+        <div className="flyff-dropdown" style={{ minWidth: '200px', ...style }} ref={containerRef}>
             <div onClick={toggleDropdown} className="flyff-dropdown-arrow" role="button" tabIndex={0} onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
