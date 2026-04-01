@@ -104,16 +104,22 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
                         (orderedKeys ? orderedKeys : Object.keys(options)).map((key) => (
                             <div 
                                 key={key} 
-                                className={`dropdown-option ${key === valueKey ? 'selected' : ''}`}
+                                className={`dropdown-option ${key === valueKey ? 'selected' : ''} ${key.startsWith('group_') ? 'dropdown-group-header' : ''}`}
                                 style={{ position: "relative" }}
                             >
-                                <div onClick={() => selectOption(key)}>{options[key]}</div>
-                                {
-                                    onRemove != undefined &&
-                                    <button className="flyff-close-button right" onClick={(e) => removeOption(e, key)}>
-                                        <img src={`${Utils.BASE_PATH}/close-icon.svg`} alt="remove" />
-                                    </button>
-                                }
+                                {key.startsWith('group_') ? (
+                                    <div style={{ fontWeight: 'bold', color: '#d386ff' }}>{options[key]}</div>
+                                ) : (
+                                    <>
+                                        <div onClick={() => selectOption(key)}>{options[key]}</div>
+                                        {
+                                            onRemove != undefined &&
+                                            <button className="flyff-close-button right" onClick={(e) => removeOption(e, key)}>
+                                                <img src={`${Utils.BASE_PATH}/close-icon.svg`} alt="remove" />
+                                            </button>
+                                        }
+                                    </>
+                                )}
                             </div>
                         ))
                     }

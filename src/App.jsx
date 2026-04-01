@@ -41,47 +41,71 @@ function App() {
   console.log('Current language:', lang);
   
   // 职业树结构排序：初心者在最前面，然后按系分组
-  const jobOrder = [
+  const jobOrderWithInfo = [
     // 初心者
-    '9686',
+    { id: '9686', name: '初心者', tier: '', group: '' },
     // 战士系
-    '764', '5330', '2246', '23509',
+    { id: '764', name: '战士', tier: '[1转]', group: '战士系' },
+    { id: '5330', name: '骑士', tier: '[2转]', group: '战士系' },
+    { id: '2246', name: '刀锋战士', tier: '[2转]', group: '战士系' },
+    { id: '910', name: '圣堂武士', tier: '[3转]', group: '战士系' },
+    { id: '23509', name: '屠杀者', tier: '[3转]', group: '战士系' },
     // 弓箭手系
-    '9098', '9295', '3545', '20311',
+    { id: '9098', name: '弓箭手', tier: '[1转]', group: '弓箭手系' },
+    { id: '9295', name: '游侠', tier: '[2转]', group: '弓箭手系' },
+    { id: '3545', name: '暗杀者', tier: '[2转]', group: '弓箭手系' },
+    { id: '20311', name: '小丑', tier: '[3转]', group: '弓箭手系' },
+    { id: '963', name: '神枪手', tier: '[3转]', group: '弓箭手系' },
     // 圣职者系
-    '8962', '9389', '7424', '21680',
+    { id: '8962', name: '圣职者', tier: '[1转]', group: '圣职者系' },
+    { id: '9389', name: '守护使者', tier: '[2转]', group: '圣职者系' },
+    { id: '7424', name: '暴力技师', tier: '[2转]', group: '圣职者系' },
+    { id: '21680', name: '炽天使', tier: '[3转]', group: '圣职者系' },
+    { id: '804', name: '力量大师', tier: '[3转]', group: '圣职者系' },
     // 魔导士系
-    '9581', '5709', '9150', '22213'
+    { id: '9581', name: '魔导士', tier: '[1转]', group: '魔导士系' },
+    { id: '5709', name: '精神使者', tier: '[2转]', group: '魔导士系' },
+    { id: '9150', name: '元素使者', tier: '[2转]', group: '魔导士系' },
+    { id: '22213', name: '心灵师', tier: '[3转]', group: '魔导士系' },
+    { id: '857', name: '奥术师', tier: '[3转]', group: '魔导士系' }
   ];
-  
-  // 先获取所有职业名称
-  const allJobNames = {};
-  for (const [k, v] of Object.entries(Classes)) {
-    let langKey = lang;
-    if (lang && lang.startsWith('zh')) {
-      allJobNames[k] = v.name && (v.name['cns'] || v.name['cn'] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
-    } else {
-      allJobNames[k] = v.name && (v.name[langKey] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
-    }
-  }
   
   // 按顺序创建职业选项数组
   const jobOptions = {};
   const orderedJobIds = [];
   
   // 按顺序添加职业
-  for (const jobId of jobOrder) {
-    if (allJobNames[jobId]) {
-      jobOptions[jobId] = allJobNames[jobId];
-      orderedJobIds.push(jobId);
+  for (const jobInfo of jobOrderWithInfo) {
+    if (Classes[jobInfo.id]) {
+      let displayName = jobInfo.name;
+      if (jobInfo.tier) {
+        displayName = `${jobInfo.tier}${displayName}`;
+      }
+      if (jobInfo.group && !jobOptions[jobInfo.group]) {
+        // 添加分系标题
+        const groupKey = `group_${jobInfo.group}`;
+        jobOptions[groupKey] = jobInfo.group;
+        orderedJobIds.push(groupKey);
+      }
+      jobOptions[jobInfo.id] = displayName;
+      orderedJobIds.push(jobInfo.id);
     }
   }
   
   // 添加可能遗漏的其他职业
   for (const [k, v] of Object.entries(Classes)) {
-    if (!jobOptions[k] && allJobNames[k]) {
-      jobOptions[k] = allJobNames[k];
-      orderedJobIds.push(k);
+    if (!jobOptions[k]) {
+      let langKey = lang;
+      let jobName;
+      if (lang && lang.startsWith('zh')) {
+        jobName = v.name && (v.name['cns'] || v.name['cn'] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
+      } else {
+        jobName = v.name && (v.name[langKey] || (lang && v.name[lang.split('-')[0]]) || v.name.en);
+      }
+      if (jobName) {
+        jobOptions[k] = jobName;
+        orderedJobIds.push(k);
+      }
     }
   }
   
@@ -89,6 +113,11 @@ function App() {
   console.log('Ordered job IDs:', orderedJobIds);
 
   function changeJob(newJobId) {
+    // 跳过分系标题
+    if (newJobId.startsWith('group_')) {
+      return;
+    }
+    
     if (newJobId == Context.player.job.id) {
       return;
     }
