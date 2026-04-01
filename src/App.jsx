@@ -37,7 +37,6 @@ function App() {
     preloadData();
   }, []);
 
-  const jobOptions = {};
   const lang = i18n.resolvedLanguage || 'zh-CN';
   console.log('Current language:', lang);
   
@@ -66,10 +65,15 @@ function App() {
     }
   }
   
+  // 按顺序创建职业选项数组
+  const jobOptions = {};
+  const orderedJobIds = [];
+  
   // 按顺序添加职业
   for (const jobId of jobOrder) {
     if (allJobNames[jobId]) {
       jobOptions[jobId] = allJobNames[jobId];
+      orderedJobIds.push(jobId);
     }
   }
   
@@ -77,10 +81,12 @@ function App() {
   for (const [k, v] of Object.entries(Classes)) {
     if (!jobOptions[k] && allJobNames[k]) {
       jobOptions[k] = allJobNames[k];
+      orderedJobIds.push(k);
     }
   }
   
   console.log('Job options:', jobOptions);
+  console.log('Ordered job IDs:', orderedJobIds);
 
   function changeJob(newJobId) {
     if (newJobId == Context.player.job.id) {
@@ -244,7 +250,7 @@ function App() {
             <img src={`https://api.flyff.com/image/class/target/${Utils.getClassById(Context.player.job.id).icon}`} alt="elementor" />
             <div id="build-job" style={{ fontWeight: "200", display: "flex", flexDirection: "column", gap: "8px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} />
+                <Dropdown options={jobOptions} onSelectionChanged={changeJob} valueKey={Context.player.job.id} orderedKeys={orderedJobIds} />
               </div>
               {t("flyff_universe_character_simulator")}
               {

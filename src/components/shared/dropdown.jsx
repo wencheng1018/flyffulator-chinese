@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as Utils from "../../flyff/flyffutils";
 
-function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style }) {
+function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orderedKeys }) {
     const [opened, setOpened] = useState(false);
     const [dropdownStyle, setDropdownStyle] = useState({ top: "110%" });
     const dropdownRef = useRef(null);
@@ -101,13 +101,13 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style }) {
                 opened &&
                 <div className="flyff-dropdown-options" style={dropdownStyle} ref={dropdownRef}>
                     {
-                        Object.entries(options).map(([key, value]) => (
+                        (orderedKeys ? orderedKeys : Object.keys(options)).map((key) => (
                             <div 
                                 key={key} 
                                 className={`dropdown-option ${key === valueKey ? 'selected' : ''}`}
                                 style={{ position: "relative" }}
                             >
-                                <div onClick={() => selectOption(key)}>{value}</div>
+                                <div onClick={() => selectOption(key)}>{options[key]}</div>
                                 {
                                     onRemove != undefined &&
                                     <button className="flyff-close-button right" onClick={(e) => removeOption(e, key)}>
