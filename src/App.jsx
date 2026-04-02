@@ -4,6 +4,7 @@ import { SearchProvider } from './searchcontext';
 import { TooltipProvider } from './tooltipcontext';
 
 import './styles/App.scss';
+import './components/shared/modal.scss';
 import Context from './flyff/flyffcontext';
 import Classes from './assets/Classes.json';
 import * as Utils from './flyff/flyffutils';
@@ -12,6 +13,7 @@ import Tooltip from './components/shared/tooltip';
 import Dropdown from './components/shared/dropdown';
 import Equipment from './components/equipment/equipment';
 import NumberInput from './components/shared/numberinput';
+import Modal from './components/shared/modal';
 
 import ImportCharacter from './components/base/importcharacter';
 import SkillsBuffs from './components/skillsandbuffs/skillsbuffs';
@@ -22,6 +24,8 @@ function App() {
   const [isImporting, setIsImporting] = useState(false);
   const [loadedBuild, setLoadedBuild] = useState(null);
   const [state, setState] = useState(false); // To force re-render. this is probably bad design but i dont care
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [newBuildName, setNewBuildName] = useState('');
   const { t, i18n } = useTranslation();
 
   // 预加载Items数据，提升用户体验
@@ -204,36 +208,33 @@ function App() {
 
   function save() {
     if (loadedBuild != null) {
-      // 如果已有加载的配装，让用户选择是覆盖还是新建
-      const existingBuildName = loadedBuild.split("_")[0];
-      const choice = confirm(`是否覆盖当前配装"${existingBuildName}"？\n\n点击"确定"覆盖，点击"取消"新建配装`);
-      
-      if (choice) {
-        // 覆盖当前配装
-        localStorage.setItem(loadedBuild, Context.player.serialize());
-        setState(!state);
-      } else {
-        // 新建配装
-        const buildName = prompt(t("enter_build_name"));
-        if (buildName == null || buildName.length == 0) {
-          return;
-        }
-
-        const key = `${buildName}_${Utils.getGuid()}`;
-        localStorage.setItem(key, Context.player.serialize());
-        loadBuild(key);
-      }
+      // 如果已有加载的配装，显示选择模态框
+      setNewBuildName('');
+      setSaveModalOpen(true);
     } else {
-      // 如果没有加载的配装，提示输入新名称
-      const buildName = prompt(t("enter_build_name"));
-      if (buildName == null || buildName.length == 0) {
-        return;
-      }
-
-      const key = `${buildName}_${Utils.getGuid()}`;
-      localStorage.setItem(key, Context.player.serialize());
-      loadBuild(key);
+      // 如果没有加载的配装，直接显示新建模态框
+      setNewBuildName('');
+      setSaveModalOpen(true);
     }
+  }
+
+  function handleOverwrite() {
+    // 覆盖当前配装
+    localStorage.setItem(loadedBuild, Context.player.serialize());
+    setSaveModalOpen(false);
+    setState(!state);
+  }
+
+  function handleNewBuild() {
+    // 新建配装
+    if (newBuildName == null || newBuildName.length == 0) {
+      return;
+    }
+
+    const key = `${newBuildName}_${Utils.getGuid()}`;
+    localStorage.setItem(key, Context.player.serialize());
+    setSaveModalOpen(false);
+    loadBuild(key);
   }
 
   function loadBuild(key) {
@@ -393,6 +394,72 @@ function App() {
 
 
           <ImportCharacter open={isImporting} onImport={importCharacter} close={() => setIsImporting(false)} />
+
+          <Modal
+            isOpen={saveModalOpen}
+            onClose={() => setSaveModalOpen(false)}
+            title={loadedBuild != null ? "保存配装" : "新建配装"}
+            actions={
+              <>
+                {loadedBuild != null && (
+                  <button className="flyff-button" onClick={handleOverwrite}>
+                    覆盖
+                  </button>
+                )}
+                <button className="flyff-button" onClick={() => setSaveModalOpen(false)}>
+                  取消
+                </button>
+                <button 
+                  className="flyff-button" 
+                  onClick={handleNewBuild}
+                  style={{ 
+                    backgroundColor: '#f1cb58', 
+                    color: '#1a1a1a',
+                    borderColor: '#f1cb58'
+                  }}
+                >
+                  {loadedBuild != null ? "新建配装" : "保存"}
+                </button>
+              </>
+            }
+          >
+            {loadedBuild != null ? (
+              <div>
+                <p>当前已加载配装：<strong>{loadedBuild.split("_")[0]}</strong></p>
+                <p style={{ marginTop: '10px', marginBottom: '15px' }}>请选择操作：</p>
+                <div style={{ marginBottom: '15px' }}>
+                  <input
+                    type="text"
+                    placeholder="输入新配装名称..."
+                    value={newBuildName}
+                    onChange={(e) => setNewBuildName(e.target.value)}
+                    style={{ width: '100%' }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleNewBuild();
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <p style={{ marginBottom: '15px' }}>请输入配装名称：</p>
+                <input
+                  type="text"
+                  placeholder="输入配装名称..."
+                  value={newBuildName}
+                  onChange={(e) => setNewBuildName(e.target.value)}
+                  style={{ width: '100%' }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleNewBuild();
+                    }
+                  }}
+                />
+              </div>
+            )}
+          </Modal>
 
           <Search />
           <Tooltip />

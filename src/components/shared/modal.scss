@@ -1,0 +1,46 @@
+@use "../../styles/variables.scss" as v;
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: v.$fg-color;
+  border: 2px solid v.$border-color;
+  border-radius: 8px;
+  padding: 20px;
+  min-width: 400px;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  margin-bottom: 15px;
+  
+  h3 {
+    color: v.$accent-color;
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+.modal-body {
+  margin-bottom: 20px;
+  color: v.$text-color;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
