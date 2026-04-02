@@ -278,6 +278,7 @@ export default class Entity {
                 itemProp = loadedItems[item.id];
             }
             if (!itemProp) {
+                this.equipment[slot] = null;
                 continue;
             }
 
@@ -1575,7 +1576,7 @@ export default class Entity {
 
         const setIds = [];
         for (const piece of pieces) {
-            if (piece == null) {
+            if (piece == null || piece.itemProp == null) {
                 continue;
             }
 
