@@ -87,7 +87,6 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
 
     function toggleDropdown(e) {
         if (e) {
-            e.preventDefault();
             e.stopPropagation();
         }
         setOpened(!opened);
@@ -97,8 +96,7 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
         <div className="flyff-dropdown" style={{ minWidth: '200px', ...style }} ref={containerRef}>
             <div onClick={toggleDropdown} className="flyff-dropdown-arrow" role="button" tabIndex={0} onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    toggleDropdown();
+                    toggleDropdown(e);
                 }
             }}>
                 <span className="dropdown-value" style={{ fontSize: '14px' }}>{options[valueKey] || ''}</span>
@@ -119,7 +117,6 @@ function Dropdown({ options, onSelectionChanged, valueKey, onRemove, style, orde
                                 className={`dropdown-option ${key === valueKey ? 'selected' : ''} ${key.startsWith('group_') ? 'dropdown-group-header' : ''}`}
                                 style={{ position: "relative", fontSize: '13px', cursor: key.startsWith('group_') ? 'default' : 'pointer', zIndex: 1001 }}
                                 onClick={(e) => {
-                                    e.preventDefault();
                                     e.stopPropagation();
                                     if (!key.startsWith('group_')) {
                                         selectOption(key);
