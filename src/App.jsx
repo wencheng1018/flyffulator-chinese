@@ -133,6 +133,9 @@ function App() {
 
     Context.player.resetEquipment();
     Context.player.skillLevels = {};
+    
+    // 切换职业时清除加载的配装状态
+    setLoadedBuild(null);
 
     setState(!state); // Just to re-render...
   }
@@ -201,12 +204,24 @@ function App() {
 
   function save() {
     if (loadedBuild != null) {
-      // 如果已有加载的配装，询问是否覆盖
+      // 如果已有加载的配装，让用户选择是覆盖还是新建
       const existingBuildName = loadedBuild.split("_")[0];
-      if (confirm(`是否覆盖当前配装"${existingBuildName}"？`)) {
+      const choice = confirm(`是否覆盖当前配装"${existingBuildName}"？\n\n点击"确定"覆盖，点击"取消"新建配装`);
+      
+      if (choice) {
         // 覆盖当前配装
         localStorage.setItem(loadedBuild, Context.player.serialize());
         setState(!state);
+      } else {
+        // 新建配装
+        const buildName = prompt(t("enter_build_name"));
+        if (buildName == null || buildName.length == 0) {
+          return;
+        }
+
+        const key = `${buildName}_${Utils.getGuid()}`;
+        localStorage.setItem(key, Context.player.serialize());
+        loadBuild(key);
       }
     } else {
       // 如果没有加载的配装，提示输入新名称
